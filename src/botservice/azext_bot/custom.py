@@ -447,3 +447,18 @@ def download_app(cmd, client, resource_group_name, resource_name, file_save_path
             return bot_env
 
     return {'downloadPath': folder_path}
+
+
+def get_manifest(cmd, client, resource_group_name, resource_name, manifest_path=None):
+    import pdb
+    pdb.set_trace()
+    #get blob url
+    blob_url = 'http://127.0.0.1:10000/devstoreaccount1/bot-manifest-v1/511560002b46416e8e9e9a0a122ac020_2TS66IC25H0FBGM2aqu0DkO6guEq3Gpd8Ie70f1nG9uZGw1?st=2018-10-09T23%3A02%3A00Z&se=2018-10-10T23%3A02%3A00Z&sp=rl&sv=2015-12-11&sr=b&sig=cPHXGtO9CTgQjIv8NYfmFuig3qwxN%2FQHncI%2FjEWnJno%3D'
+    import requests
+    response = requests.get(blob_url)
+
+
+    pass
+
+def put_manifest(cmd, client, resource_group_name, resource_name, manifest_path=None):
+    pass

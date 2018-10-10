@@ -20,4 +20,7 @@ def load_command_table(self, _):
         g.custom_command('create', 'create')
         g.custom_command('show', 'get_bot')
         g.custom_command('download', 'download_app')
-        g.custom_command('publish', 'publish_app')
+        g.custom_command('publish', 'publish_app')\
+
+    with self.command_group('bot manifest', botOperations_commandType) as g:
+        g.custom_command('get', 'get_manifest')

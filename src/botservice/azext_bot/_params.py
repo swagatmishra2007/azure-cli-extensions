@@ -42,3 +42,9 @@ def load_arguments(self, _):
         c.argument('code_dir', options_list=['--code-dir'], help='The directory to upload bot code from.')
         c.argument('proj_file', options_list=['--proj-file'], help='The startup project file name (without the .csproj) that needs to be published. Eg: EnterpriseBot.')
         c.argument('sdk_version', options_list=['--sdk-version'], help='The Microsoft Bot Builder SDK version.', arg_type=get_enum_type(['v3', 'v4']))
+
+    with self.argument_context('bot manifest get') as c:
+        c.argument('manifest_path', options_list=['--path'], help='path to the manifest file')
+    
+    with self.argument_context('bot manifest update') as c:
+        c.argument('manifest_path', options_list=['--path'], help='path to the manifest file')

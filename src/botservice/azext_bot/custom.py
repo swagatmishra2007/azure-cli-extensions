@@ -450,15 +450,68 @@ def download_app(cmd, client, resource_group_name, resource_name, file_save_path
 
 
 def get_manifest(cmd, client, resource_group_name, resource_name, manifest_path=None):
-    import pdb
-    pdb.set_trace()
-    #get blob url
-    blob_url = 'http://127.0.0.1:10000/devstoreaccount1/bot-manifest-v1/511560002b46416e8e9e9a0a122ac020_2TS66IC25H0FBGM2aqu0DkO6guEq3Gpd8Ie70f1nG9uZGw1?st=2018-10-09T23%3A02%3A00Z&se=2018-10-10T23%3A02%3A00Z&sp=rl&sv=2015-12-11&sr=b&sig=cPHXGtO9CTgQjIv8NYfmFuig3qwxN%2FQHncI%2FjEWnJno%3D'
+    import os
+    manifest_path = manifest_path or os.getcwd()
+    import uuid
+    bots = client.bots
+    url = '/subscriptions/{0}/resourceGroups/{1}/providers/Microsoft.BotService/botServices/{2}/manifest'.format(client.bots.config.subscription_id, resource_group_name, resource_name)
+    query_parameters = {}
+    query_parameters['api-version'] = '2018-07-12'
+
+    # Construct headers
+    header_parameters = {}
+    header_parameters['Accept'] = 'application/json'
+    header_parameters['Content-Type'] = 'application/json; charset=utf-8'
+    if bots.config.generate_client_request_id:
+        header_parameters['x-ms-client-request-id'] = str(uuid.uuid1())
+    if bots.config.accept_language is not None:
+        header_parameters['accept-language'] = bots._serialize.header("self.config.accept_language", bots.config.accept_language, 'str')
+
+    # Construct and send request
+    request = bots._client.get(url, query_parameters, header_parameters)
+    response = bots._client.send(request, stream=False)
+
+    if response.status_code not in [200]:
+        raise CLIError('request failed')
+    import json
+    response_json = json.loads(response.content)
+    blob_url = response_json['properties']['manifestUrl']
+
     import requests
     response = requests.get(blob_url)
-
-
-    pass
+    manifest_file = os.path.join(manifest_path, '{0}_manifest.json'.format(resource_name))
+    if os.path.exists(manifest_file):
+        raise CLIError('{0} already exists. Please delete the file and run the command again'.format(manifest_file))
+    with open(manifest_file, 'wb') as f:
+        f.write(response.content)
+    return {'manifestPath': manifest_file}
 
 def put_manifest(cmd, client, resource_group_name, resource_name, manifest_path=None):
-    pass
+    import os
+    manifest_path = manifest_path or os.path.join( os.getcwd(), '{0}_manifest.json'.format(resource_name))
+    if not os.path.exists(manifest_path):
+        raise CLIError('{0} does not exist. Please provide a valid path'.format(manifest_path))
+    import uuid
+    bots = client.bots
+    url = '/subscriptions/{0}/resourceGroups/{1}/providers/Microsoft.BotService/botServices/{2}/manifest'.format(client.bots.config.subscription_id, resource_group_name, resource_name)
+    query_parameters = {}
+    query_parameters['api-version'] = '2018-07-12'
+
+    # Construct headers
+    header_parameters = {}
+    header_parameters['Accept'] = 'application/json'
+    header_parameters['Content-Type'] = 'application/json; charset=utf-8'
+    if bots.config.generate_client_request_id:
+        header_parameters['x-ms-client-request-id'] = str(uuid.uuid1())
+    if bots.config.accept_language is not None:
+        header_parameters['accept-language'] = bots._serialize.header("self.config.accept_language", bots.config.accept_language, 'str')
+    data = None
+    with open(manifest_path, 'rb') as f:
+        data = f.read()
+    # Construct and send request
+    request = bots._client.put(url, query_parameters, header_parameters, data)
+    response = bots._client.send(request, stream=False)
+    if response.status_code not in [200]:
+        raise CLIError('Error encountered while updating manifest')
+    return response.content
+    

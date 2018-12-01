@@ -16,12 +16,17 @@ def load_command_table(self, _):
         exception_handler=bot_exception_handler
     )
 
-    with self.command_group('bot', botOperations_commandType) as g:
-        g.custom_command('create', 'create')
-        g.custom_command('show', 'get_bot')
-        g.custom_command('download', 'download_app')
-        g.custom_command('publish', 'publish_app')
+    # with self.command_group('bot', botOperations_commandType) as g:
+    #     g.custom_command('create', 'create')
+    #     g.custom_command('show', 'get_bot')
+    #     g.custom_command('download', 'download_app')
+    #     g.custom_command('publish', 'publish_app')
 
     with self.command_group('bot manifest', botOperations_commandType) as g:
         g.custom_command('get', 'get_manifest')
         g.custom_command('update', 'put_manifest')
+
+    with self.command_group('bot cortana') as g:
+        g.custom_command('create', 'create_cortana')
+        g.custom_command('show', 'get_cortana')
+        g.custom_command('delete', 'delete_cortana')

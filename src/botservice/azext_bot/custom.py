@@ -124,7 +124,8 @@ def delete_cortana(cmd, client, resource_group_name, resource_name):
     )
     request = bots._client.delete(url, query_parameters, header_parameters)
     response = bots._client.send(request, stream=False)
-    return json.loads(response.text)
+    if response.status_code not in [204]:
+        raise CLIError('Delete request failed with status code {0}'.format(response.status_code))
 
 from azure.mgmt.botservice.models import Channel
 class CortanaChannel(Channel):

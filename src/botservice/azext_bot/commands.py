@@ -30,3 +30,10 @@ def load_command_table(self, _):
         g.custom_command('create', 'create_cortana')
         g.custom_command('show', 'get_cortana')
         g.custom_command('delete', 'delete_cortana')
+
+    with self.command_group('bot', botOperations_commandType) as g:
+        g.custom_command('list', 'list_bots')
+        g.custom_command('list-channels', 'list_channels')
+        g.custom_command('list-channel-skus', 'list_channel_skus')
+        g.custom_command('list-skus', 'list_skus')
+        g.custom_command('list-authsetting-skus', 'list_authsetting_skus')

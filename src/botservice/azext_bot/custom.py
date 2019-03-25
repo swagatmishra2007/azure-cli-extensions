@@ -153,3 +153,31 @@ def create_cortana(cmd, client, resource_group_name, resource_name):
     request = bots._client.put(url, query_parameters, header_parameters, body_content)
     response = bots._client.send(request, stream=False)
     return json.loads(response.text)
+
+def get_resource(cmd, client, url):
+    bots = client.bots
+    query_parameters = {}
+    query_parameters['api-version'] = '2018-07-12'
+    request = bots._client.get(url, query_parameters)
+    response = bots._client.send(request, stream=False)
+    return json.loads(response.text)
+
+def list_bots(cmd, client, resource_group_name):
+    url = '/subscriptions/{0}/resourceGroups/{1}/providers/Microsoft.BotService/botServices'.format(client.bots.config.subscription_id, resource_group_name)
+    return get_resource(cmd, client, url)
+
+def list_channels(cmd, client, resource_group_name, resource_name):
+    url = '/subscriptions/{0}/resourceGroups/{1}/providers/Microsoft.BotService/botServices/{2}/channels'.format(client.bots.config.subscription_id, resource_group_name, resource_name)
+    return get_resource(cmd, client, url)
+
+def list_channel_skus(cmd, client, resource_group_name):
+    url = '/subscriptions/{0}/resourceGroups/{1}/providers/Microsoft.BotService/botServices'.format(client.bots.config.subscription_id, resource_group_name)
+    return get_resource(cmd, client, url)
+
+def list_skus(cmd, client, resource_group_name):
+    url = '/subscriptions/{0}/resourceGroups/{1}/providers/Microsoft.BotService/botServices'.format(client.bots.config.subscription_id, resource_group_name)
+    return get_resource(cmd, client, url)
+
+def list_authsetting_skus(cmd, client, resource_group_name):
+    url = '/subscriptions/{0}/resourceGroups/{1}/providers/Microsoft.BotService/botServices'.format(client.bots.config.subscription_id, resource_group_name)
+    return get_resource(cmd, client, url)

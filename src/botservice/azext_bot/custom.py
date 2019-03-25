@@ -173,15 +173,3 @@ def list_bots(cmd, client, resource_group_name):
 def list_channels(cmd, client, resource_group_name, resource_name):
     url = '/subscriptions/{0}/resourceGroups/{1}/providers/Microsoft.BotService/botServices/{2}/channels'.format(client.bots.config.subscription_id, resource_group_name, resource_name)
     return get_resource(cmd, client, url)
-
-def list_channel_skus(cmd, client, resource_group_name):
-    url = '/subscriptions/{0}/resourceGroups/{1}/providers/Microsoft.BotService/botServices'.format(client.bots.config.subscription_id, resource_group_name)
-    return get_resource(cmd, client, url)
-
-def list_skus(cmd, client, resource_group_name):
-    url = '/subscriptions/{0}/resourceGroups/{1}/providers/Microsoft.BotService/botServices'.format(client.bots.config.subscription_id, resource_group_name)
-    return get_resource(cmd, client, url)
-
-def list_authsetting_skus(cmd, client, resource_group_name):
-    url = '/subscriptions/{0}/resourceGroups/{1}/providers/Microsoft.BotService/botServices'.format(client.bots.config.subscription_id, resource_group_name)
-    return get_resource(cmd, client, url)

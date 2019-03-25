@@ -50,15 +50,19 @@ def get_manifest(cmd, client, resource_group_name, resource_name, manifest_path=
         raise CLIError('request failed with response code {0}'.format(response.status_code))
     import json
     response_json = json.loads(response.content)
-    blob_url = response_json['properties']['manifestUrl']
+    response_properties = response_json['properties']
+    manifest_data = json.dumps(response_properties)
+    if 'manifestUrl' in response_properties:
+        blob_url = response_json['properties']['manifestUrl']
+        import requests
+        response = requests.get(blob_url)
+        manifest_data = response.text
 
-    import requests
-    response = requests.get(blob_url)
     manifest_file = os.path.join(manifest_path, '{0}_manifest.json'.format(resource_name))
     if os.path.exists(manifest_file) and not overwrite_if_exists:
         raise CLIError('{0} already exists. Please delete the file and run the command again'.format(manifest_file))
     with open(manifest_file, 'w+') as f:
-        json.dump(json.loads(response.text), f, indent=4)
+        json.dump(json.loads(manifest_data), f, indent=4)
     return {'manifestPath': manifest_file}
 
 
@@ -124,7 +128,7 @@ def delete_cortana(cmd, client, resource_group_name, resource_name):
     )
     request = bots._client.delete(url, query_parameters, header_parameters)
     response = bots._client.send(request, stream=False)
-    if response.status_code not in [204]:
+    if response.status_code not in [204, 200]:
         raise CLIError('Delete request failed with status code {0}'.format(response.status_code))
 
 from azure.mgmt.botservice.models import Channel

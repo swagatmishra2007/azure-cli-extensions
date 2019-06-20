@@ -16,8 +16,7 @@ class BotServiceCommandsLoader(AzCommandsLoader):
             operations_tmpl='azext_bot.custom#{}',
             client_factory=get_botservice_management_client)
         super(BotServiceCommandsLoader, self).__init__(cli_ctx=cli_ctx,
-                                                       custom_command_type=custom_type,
-                                                       min_profile='2017-03-10-profile')
+                                                       custom_command_type=custom_type)
 
     def load_command_table(self, args):
         from azext_bot.commands import load_command_table
